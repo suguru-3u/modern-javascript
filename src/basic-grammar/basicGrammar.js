@@ -16,3 +16,9 @@ const NAME = "azu";
 // 数字から始まる変数名を定義することはできない
 
 // constは値の再代入ができないが、オブジェクトであればできてしまう。
+
+function test() {
+  console.log("test");
+}
+
+console.log(test());
