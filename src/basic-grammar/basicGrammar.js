@@ -22,3 +22,11 @@ function test() {
 }
 
 console.log(test());
+
+// constは値の再代入ができないが、オブジェクトであればできてしまう。
+
+function test() {
+  console.log("test");
+}
+
+console.log(test());
