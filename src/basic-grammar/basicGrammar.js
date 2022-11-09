@@ -201,3 +201,105 @@ const obj = {
 // プロパティ名`key`の値を、変数`key`として定義する
 const { key } = obj;
 console.log(key); // => "value"
+
+// JavaScriptのfalseの判定条件
+// false
+// undefined
+// null
+// 0
+// 0n
+// NaN
+// ""（空文字列）
+
+// &&を用いた条件式
+console.log("文字列" && "右辺の値"); // => "右辺の値"
+console.log(42 && "右辺の値"); // => "右辺の値"
+// 左辺がfalsyであるため、評価結果として左辺を返す
+console.log("" && "右辺の値"); // => ""
+console.log(0 && "右辺の値"); // => 0
+
+const kan = "" && 42;
+console.log(kan); // => ""
+
+const kan2 = 22 && 0;
+console.log(kan2); // => 0
+
+console.log(true || "右辺の値"); // => true
+
+console.log(false || "右辺の値"); // => 右辺の値
+
+// Nullish coalescing演算子(??) nullishとは、評価結果がnullまたはundefinedとなる値のことです。
+// 左辺がnullishであるため、右辺の値の評価結果を返す
+console.log(null ?? "右辺の値"); // => "右辺の値"
+// 左辺がnullishではないため、左辺の値の評価結果を返す
+console.log(true ?? "右辺の値"); // => true
+// ||も使用できるが数値の0を使用するとfalseの判定をされてしまうので、??が導入された。
+
+//無理して一つの式で書くよりも条件式を分解した方が読みやすくなることがある
+if (
+  (typeof a === "string" && typeof b === "string") ||
+  (typeof x === "number" && typeof y === "number")
+) {
+  // `a`と`b`が文字列型 または
+  // `x`と`y`が数値型
+}
+
+const isAbString = typeof a === "string" && typeof b === "string";
+const isXyNumber = typeof x === "number" && typeof y === "number";
+if (isAbString || isXyNumber) {
+  // `a`と`b`が文字列型 または
+  // `x`と`y`が数値型
+}
+
+// *** 暗黙歴な型変換　***
+const x = 1,
+  y = "2",
+  z = 3;
+console.log(x + y + z); // => "123"
+console.log(y + x + z); // => "213"
+console.log(x + z + y); // => "42"
+
+// シンボル → 文字列
+// ES2015で追加されたプリミティブ型であるシンボルは暗黙的に型変換できません。 文字列結合演算子をシンボルに対して利用すると例外を投げるようになっています。
+// この問題もStringコンストラクタ関数を使うことで、シンボルを明示的に文字列化することで解決できます。
+
+"文字列と" + String(Symbol("シンボルの説明")); // => "文字列とSymbol(シンボルの説明)"
+
+// 文字列 → 数値
+// 文字列から数値に変換する典型的なケースとしては、ユーザー入力として数字を受け取ることがあげられます。 ユーザー入力は文字列でしか受け取ることができないため、それを数値に変換してから利用する必要があります。
+// 文字列から数値へ明示的に変換するにはNumberコンストラクタ関数が利用できます。
+// また、文字列から数字を取り出して変換する関数としてNumber.parseInt、Number.parseFloatも利用できます。
+
+// ユーザー入力を文字列として受け取る
+const input = window.prompt("数字を入力してください", "42");
+// 文字列を数値に変換する
+const num = Number(input);
+console.log(typeof num); // => "number"
+console.log(num); // 入力された文字列を数値に変換したもの
+
+// しかし、ユーザーが数字を入力するとは限りません。 Numberコンストラクタ関数、Number.parseInt、Number.parseFloatは、 数字以外の文字列を渡すとNaN（Not a Number）を返します。
+
+const userInput = "任意の文字列";
+const num2 = Number.parseInt(userInput, 10);
+if (Number.isNaN(num)) {
+  console.log("パースした結果NaNになった", num);
+}
+
+// NaN
+// NaNという値を作る方法は簡単で、Number型と互換性のない性質のデータをNumber型へ変換した結果はNaNとなります。
+
+// JSDOC
+// JavaScriptではコメントで引数の型を記述する書式としてJSDocが有名です。
+
+// 空文字列かどうかを判定する
+// 空文字列かどうかを判定
+function isEmptyString(str) {
+  // String型でlengthが0の値の場合はtrueを返す
+  return typeof str === "string" && str.length === 0;
+}
+console.log(isEmptyString("")); // => true
+// falsyな値でも正しく判定できる
+console.log(isEmptyString(0)); // => false
+console.log(isEmptyString()); // => false
+
+// Booleanを使った型変換は、楽をするための型変換であり、正確に真偽値を得るための方法ではありません。 そのため、型変換をする前にまず別の方法で解決できないかを考えることも大切です。
