@@ -303,3 +303,11 @@ console.log(isEmptyString(0)); // => false
 console.log(isEmptyString()); // => false
 
 // Booleanを使った型変換は、楽をするための型変換であり、正確に真偽値を得るための方法ではありません。 そのため、型変換をする前にまず別の方法で解決できないかを考えることも大切です。
+// n**Null 合体代入 (??=)**
+
+// Null 合体代入 (`x ??= y`
+// ) 演算子は、`x`
+//  が [nullish](https://developer.mozilla.org/ja/docs/Glossary/Nullish)
+//  (`null`
+//  または `undefined`
+// ) である場合にのみ代入を行います。
