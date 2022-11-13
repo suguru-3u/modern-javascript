@@ -475,3 +475,14 @@ const obj = {
 const cloneObj = deepClone(obj);
 // `nest`オブジェクトも再帰的に複製されている
 console.log(cloneObj.nest === obj.nest); // => false
+
+/// *** プロトタイプオブジェクト ***
+const onjR = {
+  key: "value",
+};
+
+// `obj`インスタンスは`Object.prototype`に定義されたものを継承する
+// `obj.toString`は継承した`Object.prototype.toString`を参照している
+console.log(onjR.toString === Object.prototype.toString); // => true
+// インスタンスからプロトタイプメソッドを呼び出せる
+console.log(oonjRbj.toString()); // => "[object Object]"
