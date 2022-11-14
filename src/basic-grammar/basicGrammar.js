@@ -507,8 +507,8 @@ function fn(...args) {
 fn("a", "b", "c");
 
 // Spread構文は、配列の前に...をつけた構文のことで、関数には配列の値を展開したものが引数として渡されます。 次のコードでは、arrayの配列を展開してfn関数の引数として渡しています。
-const array = [1, 2, 4];
-fn(...array);
+const arrayaaa = [1, 2, 4];
+fn(...arrayaaa);
 
 // [ES2015] 関数の引数と分割代入
 // 関数の引数でも分かる代入を行うことができる
@@ -648,10 +648,110 @@ for (const value of arraya) {
 // 3
 
 // JavaScriptではStringオブジェクトもiterableです。 そのため、文字列を1文字ずつ列挙できます。
-const str = "𠮷野家";
-for (const value of str) {
+const str100 = "𠮷野家";
+for (const value of str100) {
   console.log(value);
 }
 // "𠮷"
 // "野"
 // "家"
+
+// *** 配列 ***
+// 存在しないインデックスにアクセスするとundefindを返す
+const array10 = [1, 2, 3];
+console.log(array10[4]); // => undefined
+
+// これは、配列がオブジェクトであることを考えると、次のように存在しないプロパティへアクセスしているのと原理は同じです。
+const obj10 = {
+  0: "one",
+  1: "two",
+  2: "three",
+  length: 3,
+};
+// obj["100"]は定義されていないため、undefinedが返る
+console.log(obj10[100]); // => undefined
+
+const aparseArray = [1, , 3]; // 疎な配列
+const fullArray = [1, 2, 3]; // 密な配列
+
+// [ES2022] Array.prototype.at
+//  配列の要素にアクセスするには配列[インデックス]という構文を使うことを紹介しました。 その際に、配列の末尾の要素へアクセスするには、array[array.length - 1]というlengthプロパティを使う必要があります。 arrayを2回書く必要があるなど、末尾の要素へのアクセスは少し手間が必要になっていました。
+// この問題を解決するためES2022では、相対的なインデックスの値を指定して配列の要素へアクセスできるArray.prototype.atメソッドが追加されました。
+
+const atArray = [1, 2, 3];
+console.log(atArray.at(-1)); // =>3
+// -1は、次のように書いた場合と同じ結果
+console.log(array[array.length - 1]); // => "c"
+
+// オブジェクトが配列かどうかを判定する
+// あるオブジェクトが配列かどうかを判定するにはArray.isArrayメソッドを利用します。
+const obj11 = {};
+const array11 = [];
+console.log(Array.isArray(obj11)); // => false
+console.log(Array.isArray(array11)); // => true
+// また、typeof演算子では配列かどうかを判定することはできません。 配列もオブジェクトの一種であるため、typeof演算子の結果が"object"となるためです。
+
+// [コラム] [ES2015] TypedArray
+// JavaScriptの配列は可変長のみですが、TypedArrayという固定長でかつ型つきの配列を扱う別のオブジェクトが存在します。 TypedArrayはバイナリデータのバッファを示すために使われるデータ型で、WebGLやバイナリを扱う場面で利用されます。 文字列や数値などのプリミティブ型の値を直接は利用できないため、通常の配列とは用途や使い勝手が異なります。
+
+// [コラム] undefinedの要素と未定義の要素の違い
+
+// 同じようにunbdefind扱いされてしまう
+// 要素として`undefined`を持つ密な配列
+const denseArray = [1, undefined, 3];
+// 要素そのものがない疎な配列
+const sparseArray = [1, , 3];
+console.log(denseArray[1]); // => undefined
+console.log(sparseArray[1]); // => undefined
+
+// この違いを見つける方法として利用できるのが、Object.hasOwn静的メソッドです。
+// 要素自体は存在し、その値が`undefined`
+console.log(Object.hasOwn(denseArray, 1)); // => true
+// 要素自体が存在しない
+console.log(Object.hasOwn(sparseArray, 1)); // => false
+
+// * 配列から要素を検索
+// 配列から指定した要素を検索する目的には、 主に次の3つがあります。
+
+// その要素のインデックスが欲しい場合
+// その要素自体が欲しい場合
+// その要素が含まれているかという真偽値が欲しい場合
+
+// インデックスを取得
+const array12 = ["Java", "JavaScript", "Ruby"];
+const indexof = array12.indexOf("JavaScript");
+console.log(indexof); // =>1
+
+// indexOfメソッドは配列からプリミティブな要素を発見できますが、オブジェクトは持っているプロパティが同じでも別オブジェクトだと異なるものとして扱われます。
+
+// 異なるオブジェクトだが値は同じものを見つけたい場合には、ArrayのfindIndexメソッドが利用できます。
+// findIndexメソッドの引数には配列の各要素をテストする関数をコールバック関数として渡します。
+const colors = [{ color: "red" }, { color: "green" }, { color: "blue" }];
+
+const indexOfBule = colors.findIndex((obj) => {
+  return obj.color === "bule";
+});
+console.log(indexOfBule); // => 2
+
+// 条件に一致する要素を取得
+// 以下の書き方であれば、よりより明確に要素自体が欲しいということを表現している
+
+// `color`プロパティが"blue"のオブジェクトを取得
+const buleColor = colors.find((obj) => {
+  return obj.color === "bule";
+});
+console.log(blueColor); // => { "color": "blue" }
+// 該当する要素がない場合は`undefined`を返す
+const whiteColor = colors.find((obj) => {
+  return obj.color === "white";
+});
+console.log(whiteColor); // => undefined
+
+// 指定範囲の要素を取得
+// 配列から指定範囲の要素を取り出す方法としてArrayのsliceメソッドが利用できます。
+
+const array13 = ["A", "B", "C", "D", "E"];
+
+console.log(array13.slice(1, 4)); //  => ["B", "C", "D"]
+// / 第二引数を省略した場合は、第一引数から末尾の要素までを取り出す
+console.log(array.slice(1)); // => ["B", "C", "D", "E"]
