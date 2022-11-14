@@ -486,3 +486,172 @@ const onjR = {
 console.log(onjR.toString === Object.prototype.toString); // => true
 // インスタンスからプロトタイプメソッドを呼び出せる
 console.log(oonjRbj.toString()); // => "[object Object]"
+
+/**
+ * 関数と宣言
+ */
+
+// [ES2015] デフォルト引数
+// 次のコードでは、渡した値をそのまま返すecho関数を定義しています。 先ほどのecho関数とは異なり、仮引数xに対してデフォルト値を指定しています。 そのため、引数を渡さずにecho関数を呼び出すと、xには"デフォルト値"が代入されます。
+function echo(x = "デフォルト値") {
+  return x;
+}
+console.log(echo(1));
+console.log(echo());
+
+// [ES2015] Rest parameters
+function fn(...args) {
+  console.log(args);
+}
+
+fn("a", "b", "c");
+
+// Spread構文は、配列の前に...をつけた構文のことで、関数には配列の値を展開したものが引数として渡されます。 次のコードでは、arrayの配列を展開してfn関数の引数として渡しています。
+const array = [1, 2, 4];
+fn(...array);
+
+// [ES2015] 関数の引数と分割代入
+// 関数の引数でも分かる代入を行うことができる
+function printUserId({ id }) {
+  console.log(id);
+}
+
+const user = {
+  id: 42,
+};
+
+printUserId(user);
+
+// 配列も行うことができる
+function print([first, second]) {
+  console.log(first); // => 1
+  console.log(second); // => 2
+}
+const array2 = [1, 2];
+print(array2);
+
+// 再帰関数
+const factorial = function innerFact(n) {
+  if (n === 0) {
+    return 1;
+  }
+  return n * innerFact(n - 1);
+};
+
+console.log(factorial(3));
+
+// コールバック関数
+const arrays = [10, 20, 40];
+arrays.forEach((value) => console.log(value));
+
+/**
+ * 基数ソート
+ */
+
+function radixSort10(a, k) {
+  // k 桁の 10 進数
+  let b = [],
+    d = 0,
+    i = 0,
+    j,
+    n,
+    r = 1;
+  // 初期化
+  for (; i < 10; i++) {
+    b[i] = [];
+  }
+  for (; d < k; ++d) {
+    // 位置の位の確認
+    for (i = 0; i < a.length; i++) {
+      b[(a[i] / r) % 10 | 0].push(a[i]);
+    }
+    for (i = 0, j = 0; j < b.length; j++) {
+      if (b[j] === undefined) {
+        continue;
+      }
+      for (n = 0; n < b[j].length; n++) {
+        a[i++] = b[j][n];
+      }
+    }
+    console.log("データの確認", b);
+    for (i = 0; i < b.length; i++) {
+      b[i] = [];
+    }
+    r *= 10;
+  }
+  return a;
+}
+
+const arraySort = [302, 111, 196, 463, 55, 3, 456, 77, 777, 444, 23, 33];
+console.log(radixSort10(arraySort, 3));
+
+/**
+ * ループと反復処理
+ */
+
+// 配列のforEachメソッド
+const arrayForEach = [1, 2, 3, 4, 5];
+arrayForEach.forEach((value) => console.log(value));
+
+// for..in 文
+// for...in文はオブジェクトのプロパティに対して、反復処理を行います。
+const obj = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+// 注記: ループのたびに毎回新しいブロックに変数keyが定義されるため、再定義エラーが発生しない
+for (const key in obj) {
+  const value = obj[key];
+  console.log(`key:${key}, value:${value}`);
+}
+// "key:a, value:1"
+// "key:b, value:2"
+// "key:c, value:3"
+
+/**
+ * オブジェクトに対する反復処理のためにfor...in文は有用に見えますが、多くの問題を持っています。
+ * JavaScriptでは、オブジェクトは何らかのオブジェクトを継承しています。
+ *  for...in文は、対象となるオブジェクトのプロパティを列挙する場合に、
+ * 親オブジェクトまで列挙可能なものがあるかを探索して列挙します。
+ * そのため、オブジェクト自身が持っていないプロパティも列挙されてしまい、意図しない結果になる場合があります。
+ * 安全にオブジェクトのプロパティを列挙するには、Object.keysメソッド、Object.valuesメソッド、Object.entriesメソッドなどが利用できます。
+ * 先ほどの例である、オブジェクトのキーと値を列挙するコードはfor...in文を使わずに書けます。
+ *  Object.keysメソッドは引数のオブジェクト自身が持つ列挙可能なプロパティ名の配列を返します。
+ * そのためfor...in文とは違い、親オブジェクトのプロパティは列挙されません。
+ */
+
+const obja = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+Object.keys(obja).forEach((key) => {
+  const value = obja[key];
+  console.log(`key:${key}, value:${value}`);
+});
+// "key:a, value:1"
+// "key:b, value:2"
+// "key:c, value:3"
+
+// [ES2015] for...of文
+/**
+ * JavaScriptでは、Symbol.iteratorという特別な名前のメソッドを実装したオブジェクトをiterableと呼びます。
+ *  iterableオブジェクトは、for...of文で反復処理できます。
+ */
+const arraya = [1, 2, 3];
+for (const value of arraya) {
+  console.log(value);
+}
+// 1
+// 2
+// 3
+
+// JavaScriptではStringオブジェクトもiterableです。 そのため、文字列を1文字ずつ列挙できます。
+const str = "𠮷野家";
+for (const value of str) {
+  console.log(value);
+}
+// "𠮷"
+// "野"
+// "家"
