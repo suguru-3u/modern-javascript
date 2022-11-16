@@ -755,3 +755,189 @@ const array13 = ["A", "B", "C", "D", "E"];
 console.log(array13.slice(1, 4)); //  => ["B", "C", "D"]
 // / 第二引数を省略した場合は、第一引数から末尾の要素までを取り出す
 console.log(array.slice(1)); // => ["B", "C", "D", "E"]
+
+// 追加と削除
+const array14 = [1, 2, 3];
+array14.push(4); // 最後尾の4を追加
+array14.pop(); // 最後尾の4を削除
+
+array14.unshift(4); // 最前列に4を追加
+array14.shift(); // 最前列の4を削除
+
+const newArray = array14.concat(array13); // array13とarray14を繋げて新しい配列を作成
+
+// [ES2015] 配列の展開
+// ...（Spread構文）を使うことで、配列リテラル中に既存の配列を展開できます。
+// 次のコードでは、配列リテラルの末尾に配列を展開しています。 これは、Arrayのconcatメソッドで配列同士を結合するのと同じ結果になります。
+
+const newArray2 = [1, 2, 3, ...newArray];
+
+// Spread構文は、concatメソッドとは異なり、配列リテラル中の任意の位置に配列を展開できます。
+const newArray3 = [1, ...newArray, 2, 3];
+
+// * [ES2019] 配列をフラット化
+// Arrayのflatメソッド[ES2019]を使うことで、多次元配列をフラットな配列に変換できます。
+// 新しい配列を返却する
+
+const array15 = [[[1], 2], 3, 4, 5];
+// 引数なしは 1 を指定した場合と同じ
+console.log(array15.flat()); // [[1, 2], 3, 4, 5];
+console.log(array15.flat(1)); // [[1, 2], 3, 4, 5];
+console.log(array15.flat(2)); // [1, 2, 3, 4, 5];
+
+// すべてをフラット化するには Infinity を渡す
+console.log(array15.flat(Infinity)); // [1, 2, 3, 4, 5];
+
+// * 配列から要素を削除 *
+// 配列の先頭や末尾の要素を削除する場合はArrayのshiftメソッドやpopメソッドで行えます。
+// しかし任意の場所の要素を削除するには、Arrayのspliceメソッドを利用できます。
+
+// spliceメソッドを利用すると、削除した要素を自動で詰めることができます。 spliceメソッドは指定したインデックスから、指定した数だけ要素を取り除き、必要ならば要素を同時に追加できます。
+const array16 = [1, 2, 3, 4, 5];
+array16.splice(1, 1); // 2を削除
+array.splice(0, array.length); // 全て削除
+
+// 配列のすべての要素を削除することはArrayのspliceで行えますが、 配列のlengthプロパティへの代入を利用した方法もあります。
+
+const array17 = [1, 2, 3];
+array17.length = 0; // 配列を空にする
+console.log(array17); // => []
+// 新しい配列で変数を上書き
+// 元々、array変数が参照していたarray17はどこからも参照されなくなり、ガベージコレクションによりメモリから解放されます。
+array17 = [];
+
+// * 破壊的なメソッドと非破壊的なメソッド *
+// 破壊的なメソッドとは、配列オブジェクトそのものを変更し、変更した配列または変更箇所を返すメソッドです。 非破壊的メソッドとは、配列オブジェクトのコピーを作成してから変更し、そのコピーした配列を返すメソッドです。
+
+// 破壊的なメソッド（例）
+const array18 = [1, 2, 3, 4, 5];
+array18.push(6);
+console.log(array18); // `push`の返り値は配列ではなく、追加後の配列のlength
+// `myArray`が参照する配列そのものが変更されている
+
+// 非破壊的メソッド（例）
+const array19 = [1, 2, 3];
+const newArray4 = array19.concat("D"); // `concat`の返り値は結合済みの新しい配列
+// `array19`は変更されていない
+console.log(myArray); // => [1, 2, 3]
+// `array19`と`newArray4`は異なる配列オブジェクト
+console.log(myArray === newArray); // => false
+
+// 破壊的なメソッドの例
+// メソッド名	返り値
+Array.prototype.pop; // 配列の末尾の値
+Array.prototype.push; // 変更後の配列のlength
+Array.prototype.splice; // 取り除かれた要素を含む配列
+Array.prototype.reverse; // 反転した配列
+Array.prototype.shift; // 配列の先頭の値
+Array.prototype.sort; // ソートした配列
+Array.prototype.unshift; // 変更後の配列のlength
+Array.prototype.copyWithin[ES2015]; // 変更後の配列
+Array.prototype.fill[ES2015]; // 変更後の配列
+
+// 非破壊的なメソッドの例
+// JavaScriptにはcopyメソッドそのものは存在しませんが、配列をコピーする方法としてArrayのsliceメソッドとconcatメソッドが利用されています。
+// sliceメソッドとconcatメソッドは引数なしで呼び出すと、その配列のコピーを返します。
+const myArray = ["A", "B", "C"];
+// `slice`は`myArray`のコピーを返す - `myArray.concat()`でも同じ
+const copiedArray = myArray.slice();
+myArray.push("D");
+console.log(myArray); // => ["A", "B", "C", "D"]
+// `array`のコピーである`copiedArray`には影響がない
+console.log(copiedArray); // => ["A", "B", "C"]
+// コピーであるため参照は異なる
+console.log(copiedArray === myArray); // => false
+
+// * 配列を反復処理するメソッド *
+// 反復処理の中でもよく利用されるのがArrayのforEach、map、filter、reduceメソッドです。 どのメソッドも共通して引数にコールバック関数を受け取るため高階関数と呼ばれます。
+
+// Array.prototype.forEach
+const array20 = [1, 2, 3];
+array20.forEach((value, index, array) => {
+  console.log(value, index, array);
+});
+// コンソールの出力
+// 1, 0, [1, 2, 3]
+// 2, 1, [1, 2, 3]
+// 3, 2, [1, 2, 3]
+
+// Array.prototype.map
+// 各要素に10を乗算した新しい配列を作成する
+const newArray20 = array20.map((value, index, array) => {
+  return value * 10;
+});
+
+// Array.prototype.filter
+// コールバック関数がtrueを返した要素だけを集めた新しい配列を返す非破壊的なメソッドです。 配列から不要な要素を取り除いた配列を作成したい場合に利用します。
+const newAaary21 = array20.filter((value, index, array) => {
+  return value % 2 === 1;
+});
+
+// Array.prototype.reduce
+// Arrayのreduceメソッドは累積値（アキュムレータ）と配列の要素を順番にコールバック関数へ渡し、1つの累積値を返します。 配列から配列以外を含む任意の値を作成したい場合に利用します。
+const totalValue = array20.reduce((accumulator, currentValue, index, array) => {
+  return accumulator + currentValue;
+}, 0);
+// 次のコードでは、reduceメソッドは初期値を0として配列の各要素を加算した1つの数値を返します。 つまり配列から配列要素の合計値というNumber型の値を返しています。
+// reduceメソッドには利点と可読性のトレードオフがありますが、利用する場合はreduceメソッドを扱う処理を関数で囲むなど処理の意図がわかるように工夫をする必要があります。
+const array21 = [1, 2, 3];
+function sum(array21) {
+  return array21.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+}
+console.log(sum(array)); // => 6
+
+// * [コラム] Array-likeオブジェクト *
+// 配列のように扱えるが配列ではないオブジェクトのことを、Array-likeオブジェクトと呼びます。 Array-likeオブジェクトとは配列のようにインデックスにアクセスでき、配列のようにlengthプロパティも持っています。しかし、配列のインスタンスではないため、Arrayのプロトタイプメソッドを持っていないオブジェクトのことです。
+// Array-likeオブジェクトの例（arguments）
+function myFunc() {
+  console.log(arguments[0]); // => "a"
+  console.log(arguments[1]); // => "b"
+  console.log(arguments[2]); // => "c"
+  // 配列ではないため、配列のメソッドは持っていない
+  console.log(typeof arguments.forEach); // => "undefined"
+}
+myFunc("a", "b", "c");
+
+// Array-likeオブジェクトか配列なのかを判別するにはArray.isArrayメソッドを利用できます。
+function myFunc() {
+  console.log(Array.isArray([1, 2, 3])); // => true
+  console.log(Array.isArray(arguments)); // => false
+}
+myFunc("a", "b", "c");
+
+// Array.fromメソッド[ES2015]を使うことでArray-likeオブジェクトを配列に変換して扱うことができます。
+function myFunc() {
+  // Array-likeオブジェクトを配列へ変換
+  const argumentsArray = Array.from(arguments);
+  console.log(Array.isArray(argumentsArray)); // => true
+  // 配列のメソッドを利用できる
+  argumentsArray.forEach((arg) => {
+    console.log(arg);
+  });
+}
+myFunc("a", "b", "c");
+
+// * メソッドチェーンと高階関数 *
+// メソッドチェーンとは、メソッドを呼び出した返り値に対してさらにメソッド呼び出しをするパターンのことを言います。
+const array30 = [1].concat(2).concat(3);
+console.log(array30); // => [1, 2, 3]
+
+// ECMAScriptのバージョン名と発行年
+const ECMAScriptVersions = [
+  { name: "ECMAScript 1", year: 1997 },
+  { name: "ECMAScript 2", year: 1998 },
+  { name: "ECMAScript 3", year: 1999 },
+  { name: "ECMAScript 5", year: 2009 },
+  { name: "ECMAScript 5.1", year: 2011 },
+  { name: "ECMAScript 2015", year: 2015 },
+  { name: "ECMAScript 2016", year: 2016 },
+  { name: "ECMAScript 2017", year: 2017 },
+];
+const versionNames = ECMAScriptVersions.filter((ECMAScript) => {
+  ECMAScript.year <= 2000;
+}).map((ECMAScript) => {
+  ECMAScript.name;
+});
+console.log(versionNames); // => ["ECMAScript 1", "ECMAScript 2", "ECMAScript 3"]
